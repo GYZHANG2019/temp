@@ -5,31 +5,22 @@ if [ -f "config.mk" ]; then
 	. ./config.mk
 fi
 
-debug=n
 cross=n
-host_arch=`uname -m`
 arch=$ARCH
 
-if [ "$1" == "x86_64" ]; then
-arch=x86_64
-fi
-
 if [ -z "$ARCH" ]; then
-arch=x86_64
+arch=`uname -m`
 fi
 
-if [ "$1" == "aarch64" ]; then
-arch=arm64
+if [[ "$arch" != "`uname -m`" ]]; then
+echo "Target arch is $arch, host arch is $host_arch, so enable cross compiling"
+cross=y
 fi
 
 if [ "$arch" == "aarch64" ]; then
 arch=arm64
 fi
 
-if [[ "$arch" != "$host_arch" ]]; then
-echo "Target arch is $arch, host arch is $host_arch, so enable cross compiling"
-cross=y
-fi
 
 cmd="./configure --pkg-config=true --enable-vpe "
 
@@ -40,7 +31,7 @@ if [ "$1" == "clean" ]; then
         exit 0
 fi
 
-make DEBUG=${debug} ARCH=$arch
+make DEBUG=${DEBUG} ARCH=$arch
 if [ $? != 0 ]; then echo "build VPE error";exit 1; fi
 
 if [ "${cross}" == "y" ]; then
@@ -59,7 +50,7 @@ fi
 
 cd ../ffmpeg
 
-if [ "${debug}" == "y" ]; then
+if [ "${DEBUG}" == "y" ]; then
 	cmd=$cmd"--disable-optimizations --disable-asm --disable-stripping "
 fi
 

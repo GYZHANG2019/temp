@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # VeriSilicon configure script
 #
@@ -27,8 +27,8 @@ print_usage(){
 }
 
 debug=n
-arch=x86_64
-cross=
+arch=`uname -m`
+cross=n
 sysroot=
 kernel=
 outpath=
@@ -68,10 +68,6 @@ echo "debug=$debug"
 echo "outpath=$outpath"
 echo "Create VPE build config file successfully!"
 
-if [ "$arch" == "aarch64" ]; then
-arch=arm64
-fi
-
 if [ ! -z "$LD_LIBRARY_PATH" ]; then
     unset LD_LIBRARY_PATH
 fi
@@ -104,7 +100,7 @@ echo "export AR=\"${cross}ar rcs\"" >> config.mk
 echo "export NM=${cross}nm" >> config.mk
 echo "export ARCH=$arch" >> config.mk
 
-if [ "$arch" == "arm64" ]; then
+if [ "$arch" == "aarch64" ]; then
 echo "export ENV=arm_linux_pci" >> config.mk
 else
 echo "export ENV=x86_linux_pci" >> config.mk

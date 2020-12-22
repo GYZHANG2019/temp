@@ -24,12 +24,12 @@ all:
 	$(MAKE) -C $(KERN_DIR) M=`pwd` modules
 
 test:
-	$(CC) -o edma_test_hugepage edma_test_hugepage.c -lhugetlbfs
-	$(CC) -o edma_link_test edma_link_test.c -lhugetlbfs
+	$(CC) -o edma_test_hugepage edma_test_hugepage.c -lhugetlbfs -L./
+	$(CC) -o edma_link_test edma_link_test.c -lhugetlbfs -L./
 	$(CC) -o mem_test mem_test.c
 	$(CC) -o edma_phyaddr_test edma_phyaddr_test.c
-	$(CC) -o pcie_bw_test pcie_bw_test.c -lhugetlbfs
-	$(CC) -o pcie_ddr_memtest pcie_ddr_memtest.c -lhugetlbfs
+	$(CC) -o pcie_bw_test pcie_bw_test.c -lhugetlbfs -L./
+	$(CC) -o pcie_ddr_memtest pcie_ddr_memtest.c -lhugetlbfs -L./
 
 .PHONY: clean
 clean:

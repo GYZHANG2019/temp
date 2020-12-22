@@ -26,19 +26,21 @@ DRV_PATH := "/lib/modules/$(shell uname -r)/kernel/drivers/pci/pcie/solios-x"
 
 all: vpi drivers
 
-ifeq ($(DEBUG),y)
-	@echo "Build debug VPE"
-else
-	@echo "Build release VPE"
-endif
 
-ARCH = $(shell uname -m)
+ARCH ?= $(shell uname -m)
 ifeq ($(ARCH),aarch64)
         ARCH=arm64
 endif
 
 vpi:
 	@echo "VPE build step - build VPI"
+
+ifeq ($(DEBUG),y)
+	@echo "Build debug VPE"
+else
+	@echo "Build release VPE"
+endif
+	
 	make -C vpi CHECK_MEM_LEAK=y DEBUG=$(DEBUG) ARCH=$(ARCH)
 
 drivers:
