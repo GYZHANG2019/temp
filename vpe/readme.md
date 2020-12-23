@@ -83,12 +83,37 @@ Here VPE Plugin for FFmpeg is supported and to be extended to GStreamer and othe
 
 # Building and Installation
 
-1. Config the toolchain
-If you are doing the cross compiling, then you need to config the toolchain first:
-for example:
+## 1. Config the toolchain
+If you are doing the cross compiling, then you need to run configure to generate the config file first:
 
+Example for non-cross compiling:
 
-2. Build
+```bash
+$./configure
+
+arch=x86_64
+cross=
+sysroot=
+kernel=
+debug=n
+outpath=
+Create VPE build config file successfully!
+```
+Example for cross compiling:
+
+```bash
+./configure --arch=arm64 --cross=aarch64-linux-gnu- --sysroot=toolchain/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/aarch64-linux-gnu/libc --kernel=/work/imx8mmevk-poky-linux/linux-imx/4.19.35-r0/build
+
+arch=arm64
+cross=aarch64-linux-gnu-
+sysroot=/toolchain/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/aarch64-linux-gnu/libc
+kernel=/work/imx8mmevk-poky-linux/linux-imx/4.19.35-r0/build
+debug=n
+outpath=
+Create VPE build config file successfully!
+```
+
+## 2. Build
 ```bash
 $make
 VPE build step - build VPI
@@ -104,7 +129,7 @@ make[1]: Leaving directory `/home/gyzhang/work/spsd/vpe/drivers/transcoder-pcie'
 Build release VPE
 ```
 
-3. Install
+## 3. Install
 ```bash
 $sudo make install
 VPE build step - install
@@ -122,10 +147,9 @@ depmod
 VPE installation finished!
 ```
 
-4. Uninstall
+## 4. Uninstall
 ```bash
 $sudo make uninstall
-[gyzhang@k8s-master /home/gyzhang/work/opensource/vpe]$sudo make uninstall
 VPE build step - uninstall
 /sbin/ldconfig
 depmod
