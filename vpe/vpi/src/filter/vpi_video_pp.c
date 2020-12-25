@@ -1317,7 +1317,7 @@ static void pp_request_buf(PPClient *pp)
         if (cnt != 0) {
             break;
         } else {
-            usleep(50);
+            vpi_usleep(100);
             pp_pic_consume(pp);
         }
     } while(1);

@@ -43,7 +43,7 @@
 #define HWUPLOAD_FLAG        1
 #define PP_FLAG              2
 
-#define MAX_DEVICE_NUM       12
+#define MAX_DEVICE_NUM       100
 
 typedef void *VpiCtx;
 

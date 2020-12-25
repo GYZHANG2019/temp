@@ -34,11 +34,20 @@
 #include "vpi_error.h"
 #include "vpi_log.h"
 #include "vpi_log_manager.h"
+#include <time.h>
+#include <error.h>
 
 static FILE *report_file;
-static int report_file_level = LOG_LEVEL_DBG;
+int report_file_level = LOG_LEVEL_DBG;
 
 #define MAX_LOG_BUF_SIZE (4096)
+
+int vpi_usleep(unsigned usec)
+{
+    struct timespec ts = { usec / 1000000, usec % 1000000 * 1000 };
+    while (nanosleep(&ts, &ts) < 0 && errno == EINTR);
+    return 0;
+}
 
 void log_print(const char *p_format, ...)
 {
@@ -58,6 +67,11 @@ void log_write(LogLevel level, const char *p_header, const char *p_format, ...)
 {
     va_list ap;
     char buf[MAX_LOG_BUF_SIZE] = { 0 };
+
+    if (report_file_level < level) {
+        return;
+    }
+
     if (p_header) {
         strncpy(buf, p_header, MAX_LOG_BUF_SIZE-1);
     }
@@ -70,10 +84,8 @@ void log_write(LogLevel level, const char *p_header, const char *p_format, ...)
     vsnprintf(&buf[strlen(buf)], MAX_LOG_BUF_SIZE - strlen(buf), p_format, ap);
     va_end(ap);
 
-    if (report_file_level >= level) {
-        fputs(buf, report_file);
-        fflush(report_file);
-    }
+    fputs(buf, report_file);
+    fflush(report_file);
 }
 
 VpiRet log_setlevel(int level)
