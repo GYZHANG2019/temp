@@ -1,0 +1,6 @@
+devices=($(lspci -d 10ee:5070 | awk '{print $1}')) 
+for device in ${devices[@]}; do
+	echo programming $device...
+	cmd="sudo ./jmamgmt --live devices/0000:$device/flash '\"action\":\"program\"','\"file_type\":\"ZSP\"','\"file\":\"$(realpath firmware/supernova_zsp_fw_ma35.bin)\"'"
+	echo $cmd | sh
+done
